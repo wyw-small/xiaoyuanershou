@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="校园二手交易与失物招领系统">
+  <title>校园集 · 校园二手交易与失物招领系统</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" data-view="home">
+      <span class="brand-mark">集</span>
+      <span><strong>校园集</strong><small>二手交易 · 失物招领</small></span>
+    </a>
+    <nav class="nav" id="mainNav">
+      <button class="nav-btn active" data-view="home">首页</button>
+      <button class="nav-btn" data-view="market">二手市场</button>
+      <button class="nav-btn" data-view="lostfound">失物招领</button>
+      <button class="nav-btn" data-view="publish">发布信息</button>
+      <button class="nav-btn" data-view="profile">我的</button>
+      <button class="nav-btn admin-only hidden" data-view="admin">审核台</button>
+    </nav>
+    <div class="account">
+      <button class="ghost-btn" id="loginButton">登录 / 注册</button>
+      <div class="user-chip hidden" id="userChip">
+        <span id="userName"></span>
+        <button class="link-btn" id="logoutButton">退出</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="view active" id="view-home">
+      <div class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">让校内闲置与失物信息高效流转</span>
+          <h1>校园生活服务，<br>一个平台就够。</h1>
+          <p>发布闲置物品、发布失物招领、检索校园信息。所有内容经管理员审核后展示，联系方式由发布者自主提供。</p>
+          <div class="hero-actions">
+            <button class="primary-btn" data-view="market">逛逛市场</button>
+            <button class="secondary-btn" data-view="lostfound">查看失物</button>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <div class="radar"><span></span><span></span><span></span><i>校</i></div>
+          <div class="stat-row">
+            <div><strong id="heroMarket">0</strong><span>在售信息</span></div>
+            <div><strong id="heroLost">0</strong><span>失物招领</span></div>
+            <div><strong id="heroUsers">0</strong><span>注册用户</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="section-head">
+        <div><span class="eyebrow">本周推荐</span><h2>最新校园闲置</h2></div>
+        <button class="text-btn" data-view="market">查看全部 →</button>
+      </div>
+      <div class="card-grid" id="homeMarket"></div>
+    </section>
+
+    <section class="view" id="view-market">
+      <div class="section-head page-head">
+        <div><span class="eyebrow">MARKET</span><h1>校园二手市场</h1><p>教材、数码、生活用品，校内当面交易更安心。</p></div>
+        <button class="primary-btn" data-view="publish" data-publish-tab="market">发布闲置</button>
+      </div>
+      <div class="filters">
+        <input id="marketSearch" type="search" placeholder="搜索商品名称或描述">
+        <select id="marketCategory">
+          <option value="">全部分类</option><option>数码产品</option><option>教材书籍</option><option>生活用品</option><option>运动户外</option><option>其他</option>
+        </select>
+        <select id="marketSort"><option value="newest">最新发布</option><option value="priceAsc">价格从低到高</option><option value="priceDesc">价格从高到低</option></select>
+        <button class="secondary-btn" id="marketSearchBtn">筛选</button>
+      </div>
+      <div class="card-grid" id="marketList"></div>
+      <p class="empty hidden" id="marketEmpty">暂无符合条件的商品</p>
+    </section>
+
+    <section class="view" id="view-lostfound">
+      <div class="section-head page-head">
+        <div><span class="eyebrow">LOST & FOUND</span><h1>失物招领</h1><p>及时发布线索，让遗失物品更快回到主人身边。</p></div>
+        <button class="primary-btn" data-view="publish" data-publish-tab="lostfound">发布信息</button>
+      </div>
+      <div class="filters">
+        <input id="lostSearch" type="search" placeholder="搜索物品名称、地点或描述">
+        <select id="lostKind"><option value="">全部类型</option><option value="lost">寻物启事</option><option value="found">失物招领</option></select>
+        <select id="lostCategory"><option value="">全部分类</option><option>证件卡片</option><option>数码产品</option><option>学习用品</option><option>随身物品</option><option>其他</option></select>
+        <button class="secondary-btn" id="lostSearchBtn">筛选</button>
+      </div>
+      <div class="card-grid" id="lostList"></div>
+      <p class="empty hidden" id="lostEmpty">暂无符合条件的信息</p>
+    </section>
+    <section class="view" id="view-publish">
+      <div class="section-head page-head">
+        <div><span class="eyebrow">PUBLISH</span><h1>发布校园信息</h1><p>信息提交后需管理员审核，请确保内容真实、联系方式准确。</p></div>
+      </div>
+      <div class="publish-tabs">
+        <button class="tab-btn active" data-publish-tab="market">发布二手商品</button>
+        <button class="tab-btn" data-publish-tab="lostfound">发布失物招领</button>
+      </div>
+      <form class="form-card active" id="marketForm">
+        <div class="form-grid">
+          <label>商品标题<input name="title" maxlength="50" required placeholder="例如：九成新机械键盘"></label>
+          <label>价格（元）<input name="price" type="number" min="0" step="0.01" required placeholder="0"></label>
+          <label>分类<select name="category"><option>数码产品</option><option>教材书籍</option><option>生活用品</option><option>运动户外</option><option>其他</option></select></label>
+          <label>成色<select name="condition"><option>全新</option><option>九成新</option><option>八成新</option><option>七成新及以下</option><option>不限</option></select></label>
+          <label>交易地点<input name="tradePlace" required placeholder="例如：学生公寓A区门口"></label>
+          <label>联系方式<input name="contact" required placeholder="QQ、微信或手机号"></label>
+          <label class="wide">详细描述<textarea name="description" rows="5" required placeholder="说明物品来源、使用情况和交易要求"></textarea></label>
+        </div>
+        <button class="primary-btn" type="submit">提交审核</button>
+      </form>
+      <form class="form-card" id="lostForm">
+        <div class="form-grid">
+          <label>信息类型<select name="kind"><option value="lost">寻物启事</option><option value="found">失物招领</option></select></label>
+          <label>物品标题<input name="title" maxlength="50" required placeholder="例如：丢失一张校园卡"></label>
+          <label>物品分类<select name="category"><option>证件卡片</option><option>数码产品</option><option>学习用品</option><option>随身物品</option><option>其他</option></select></label>
+          <label>日期<input name="eventDate" type="date" required></label>
+          <label>地点<input name="location" required placeholder="例如：二食堂附近"></label>
+          <label>联系方式<input name="contact" required placeholder="QQ、微信或手机号"></label>
+          <label class="wide">详细描述<textarea name="description" rows="5" required placeholder="请描述物品特征，但不要公开过于敏感的信息"></textarea></label>
+        </div>
+        <button class="primary-btn" type="submit">提交审核</button>
+      </form>
+    </section>
+
+    <section class="view" id="view-profile">
+      <div class="section-head page-head">
+        <div><span class="eyebrow">MY SPACE</span><h1>我的发布</h1><p>查看审核状态、浏览收藏并管理自己发布的信息。</p></div>
+      </div>
+      <div id="profileGuest" class="empty-state">登录后可以查看和管理自己的发布记录。</div>
+      <div id="profileContent" class="hidden">
+        <h2 class="subheading">我的商品</h2><div class="card-grid" id="myMarket"></div>
+        <h2 class="subheading">我的失物招领</h2><div class="card-grid" id="myLost"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-admin">
+      <div class="section-head page-head">
+        <div><span class="eyebrow">ADMIN</span><h1>内容审核台</h1><p>审核学生发布内容，维护平台信息质量。</p></div>
+        <button class="secondary-btn" id="refreshAdmin">刷新数据</button>
+      </div>
+      <div class="admin-stats" id="adminStats"></div>
+      <h2 class="subheading">待审核商品</h2><div class="review-list" id="pendingMarket"></div>
+      <h2 class="subheading">待审核失物招领</h2><div class="review-list" id="pendingLost"></div>
+    </section>
+  </main>
+
+  <dialog id="loginDialog">
+    <button class="dialog-close" data-close-dialog="loginDialog">×</button>
+    <div class="dialog-head"><span class="eyebrow">WELCOME</span><h2>登录校园集</h2><p id="loginHint">使用账号登录，或创建一个新账号。</p></div>
+    <div class="dialog-tabs"><button class="tab-btn active" id="showLogin">登录</button><button class="tab-btn" id="showRegister">注册</button></div>
+    <form id="loginForm" class="dialog-form active">
+      <label>用户名<input name="username" autocomplete="username" required></label>
+      <label>密码<input name="password" type="password" autocomplete="current-password" required></label>
+      <button class="primary-btn" type="submit">登录</button>
+    </form>
+    <form id="registerForm" class="dialog-form">
+      <label>用户名<input name="username" autocomplete="username" required placeholder="3-20位字母、数字或下划线"></label>
+      <label>姓名或昵称<input name="displayName" maxlength="20" required></label>
+      <label>密码<input name="password" type="password" autocomplete="new-password" required placeholder="至少8位，包含字母和数字"></label>
+      <button class="primary-btn" type="submit">注册并登录</button>
+    </form>
+  </dialog>
+
+  <dialog id="detailDialog"><button class="dialog-close" data-close-dialog="detailDialog">×</button><div id="detailContent"></div></dialog>
+  <div class="toast" id="toast"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
